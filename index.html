@@ -2,11 +2,11 @@
     <body>
         <form onsubmit="saveToLocalStorage(event)">
             <label>Name</label>
-            <input type="text" name="username" required>;
+            <input id="username" type="text" name="username" required>;
             <label>EmailId</label>
-            <input type="email" name="emailid" required>;
+            <input id="email" type="email" name="emailid" required>;
             <label>Phone Number</label>
-            <input type="tel" name="phonenumber">;
+            <input id="phonenumber" type="tel" name="phonenumber">;
             <button> Submit </button>
         </form>
         <ul id="listofuser"></ul>
@@ -17,9 +17,9 @@
                 const name = event.target.username.value;
                 const email = event.target.emailid.value;
                 const phonenumber = event.target.phonenumber.value;
-                localStorage.setItem('name', name);
-                localStorage.setItem('email', email);
-                localStorage.setItem('phonenumber', phonenumber);
+                // localStorage.setItem('name', name);
+                // localStorage.setItem('email', email);
+                // localStorage.setItem('phonenumber', phonenumber);
                 const obj = {
                     name,
                     email,
@@ -31,8 +31,36 @@
 
             function showNewuserOnScreen(user){
                 const parentNode = document.getElementById('listofuser');
-                const childHTML = `<li> ${user.name} - ${user.email} </li>`
+                const childHTML = `<li id=${user.email}> ${user.name} - ${user.email} 
+                                    <button onclick=deleteUser('${user.email}')> Delete user </button>
+                                    <button onclick=editUserDetails('${user.email}','${user.name}','${user.phonenumber}')>Edit User </button>
+                                </li>`
                 parentNode.innerHTML = parentNode.innerHTML +  childHTML;
+            }
+
+            // edit user 
+
+            function editUserDetails(emailId, name, phonenumber) {
+                
+                document.getElementById('email').value = emailId;
+                document.getElementById('username').value = name;
+                document.getElementById('phonenumber').value = phonenumber;
+
+                deleteUser(emailId);
+            }
+
+            function deleteUser(emailId) {
+                console.log(emailId)
+                localStorage.removeItem(emailId);
+                removeUserFrom(emailId);
+            }
+
+            function removeUserFrom(emailId){
+                const parentNode = document.getElementById('listofuser'); 
+                const childNodetoBeDeleted = document.getElementById(emailId);
+
+                parentNode.removeChild(childNodetoBeDeleted);
+                
             }
         </script>
     </body>
